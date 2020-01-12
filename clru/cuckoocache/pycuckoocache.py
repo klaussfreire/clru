@@ -3,6 +3,8 @@
 from random import random
 import functools
 
+import six
+
 CacheMissError = KeyError
 
 IsThreadsafe = False
@@ -318,7 +320,7 @@ class LazyCuckooCache(object):
             return deflt
 
     def setdefault(self, key, deflt = None):
-        for j in xrange(3):
+        for j in six.moves.range(3):
             table = self.table
             tsize = len(table)
             h1 = self.hash1(key)
@@ -370,7 +372,7 @@ class LazyCuckooCache(object):
         if self is iterOrDict:
             return
         if isinstance(iterOrDict, dict) or isinstance(iterOrDict, LazyCuckooCache):
-            for k,v in iterOrDict.iteritems():
+            for k,v in six.iteritems(iterOrDict):
                 self[k] = v
         else:
             for k,v in iterOrDict:
