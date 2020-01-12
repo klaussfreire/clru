@@ -5,13 +5,13 @@ import unittest
 import gc
 import weakref
 
-from chorde import pycuckoocache
+from clru.cuckoocache import pycuckoocache
 
 try:
-    from chorde import cuckoocache
+    from clru.cuckoocache import cycuckoocache as cuckoocache
     skipIfNotCythonized = lambda c : c
 except ImportError:
-    from chorde import pycuckoocache as cuckoocache # lint:ok
+    from clru.cuckoocache import pycuckoocache as cuckoocache# lint:ok
     skipIfNotCythonized = unittest.skip("Optimized LazyCuckooCache not built in")
 
 class PyCuckooCacheTest(unittest.TestCase):

@@ -3,13 +3,13 @@ from __future__ import absolute_import
 
 import unittest
 
-from chorde import pylrucache
+from clru.lrucache import pylrucache
 
 try:
-    from chorde import lrucache
+    from clru.lrucache import cylrucache as lrucache
     skipIfNoLRUCache = lambda c : c
 except ImportError:
-    from chorde import pylrucache as lrucache  # lint:ok
+    from clru.lrucache import pylrucache as lrucache  # lint:ok
     skipIfNoLRUCache = unittest.skip("Optimized LRUCache not built in")
 
 class PyLRUCacheTest(unittest.TestCase):
