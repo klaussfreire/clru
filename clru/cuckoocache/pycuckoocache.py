@@ -3,7 +3,7 @@
 from random import random
 import functools
 
-from chorde.clients.base import CacheMissError
+CacheMissError = KeyError
 
 IsThreadsafe = False
 
