@@ -15,7 +15,7 @@ except ImportError:
     skipIfNotCythonized = unittest.skip("Optimized LazyCuckooCache not built in")
 
 class PyCuckooCacheTest(unittest.TestCase):
-    TEST_ELEMENTS = zip(range(10), range(10,20))
+    TEST_ELEMENTS = list(zip(range(10), range(10,20)))
     Cache = pycuckoocache.LazyCuckooCache
 
     def _build_with_values(self, size, **kwargs):
@@ -157,7 +157,7 @@ class PyCuckooCacheTest(unittest.TestCase):
         i1 = c.items()
         c.update(c)
         i2 = c.items()
-        self.assertEqual(i1, i2)
+        self.assertEqual(list(i1), list(i2))
 
     def testSelfReference(self):
         c = self.Cache(20)
@@ -199,12 +199,12 @@ class PyCuckooCacheTest(unittest.TestCase):
         c = self._build_with_values(20, eviction_callback = eviction_callback)
         self.assertEqual(len(c), len(c.keys()))
         self.assertEqual(len(c), len(c.values()))
-        self.assertEqual(len(c), len(c.items()))
-        self.assertEqual(zip(c.keys(), c.values()), c.items())
-        self.assertEqual(zip(c.iterkeys(), c.itervalues()), list(c.iteritems()))
+        self.assertEqual(len(c), len(list(c.items())))
+        self.assertEqual(list(zip(c.keys(), c.values())), list(c.items()))
+        self.assertEqual(list(zip(c.iterkeys(), c.itervalues())), list(c.iteritems()))
         self.assertEqual(c.keys(), list(c.iterkeys()))
         self.assertEqual(c.values(), list(c.itervalues()))
-        self.assertEqual(c.items(), list(c.iteritems()))
+        self.assertEqual(list(c.items()), list(c.iteritems()))
         self.assertEqual({k for k,v in self.TEST_ELEMENTS}, set(c.keys()) | {k for k,v in evictions})
         self.assertEqual({k for k,v in self.TEST_ELEMENTS}, set(c.iterkeys()) | {k for k,v in evictions})
         self.assertEqual({v for k,v in self.TEST_ELEMENTS}, set(c.values()) | {v for k,v in evictions})
@@ -248,7 +248,7 @@ class PyCuckooCacheTest(unittest.TestCase):
                 b = c.get(k)
                 b = c.pop(k, v)
 
-            self.assertEquals(len(c), len(c.items()))
+            self.assertEquals(len(list(c)), len(list(c.items())))
 
     def testEqualsReentrancy(self):
         # ShyItem self-deletes itself when it's about to be found by SOMEONE ELSE

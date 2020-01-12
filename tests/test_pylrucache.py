@@ -13,7 +13,7 @@ except ImportError:
     skipIfNoLRUCache = unittest.skip("Optimized LRUCache not built in")
 
 class PyLRUCacheTest(unittest.TestCase):
-    TEST_ELEMENTS = zip(range(10), range(10,20))
+    TEST_ELEMENTS = list(zip(range(10), range(10,20)))
     Cache = pylrucache.LRUCache
 
     def testAdd(self, **kwargs):
