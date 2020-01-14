@@ -33,6 +33,13 @@ class PyLRUCacheTest(unittest.TestCase):
         c.update(dict(a=1, b=2))
         self.assertEqual(set(c.iteritems()), {("a", 1), ("b", 2)})
 
+    def testUpdateCache(self):
+        c1 = self.Cache(20)
+        c1.update(dict(a=1, b=2))
+        c2 = self.Cache(20)
+        c2.update(c1)
+        self.assertEqual(set(c2.iteritems()), {("a", 1), ("b", 2)})
+
 
 
 @skipIfNoLRUCache
