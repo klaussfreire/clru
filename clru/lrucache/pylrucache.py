@@ -1,5 +1,7 @@
 """Efficient (O(log n) amortized update) Least-Recently-Used cache"""
 
+import six
+
 CacheMissError = KeyError
 
 IsThreadsafe = False
@@ -200,7 +202,7 @@ class LRUCache(object):
 
     def update(self, iterOrDict):
         if isinstance(iterOrDict, dict) or isinstance(iterOrDict, LRUCache):
-            for k,v in iterOrDict.iteritems():
+            for k,v in six.iteritems(iterOrDict):
                 self[k] = v
         else:
             for k,v in iterOrDict:
