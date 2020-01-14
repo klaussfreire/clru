@@ -4,6 +4,7 @@ from random import random
 import functools
 
 import six
+from six.moves import range as xrange
 
 CacheMissError = KeyError
 
@@ -320,7 +321,7 @@ class LazyCuckooCache(object):
             return deflt
 
     def setdefault(self, key, deflt = None):
-        for j in six.moves.range(3):
+        for j in xrange(3):
             table = self.table
             tsize = len(table)
             h1 = self.hash1(key)
