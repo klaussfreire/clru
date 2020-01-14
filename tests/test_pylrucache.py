@@ -28,6 +28,13 @@ class PyLRUCacheTest(unittest.TestCase):
         for k,v in self.TEST_ELEMENTS:
             self.assertEqual(c.get(k, overflow.get(k)), v)
 
+    def testUpdate(self):
+        c = self.Cache(20)
+        c.update(dict(a=1, b=2))
+        self.assertEqual(set(c.iteritems()), {("a", 1), ("b", 2)})
+
+
+
 @skipIfNoLRUCache
 class LRUCacheTest(PyLRUCacheTest):
     Cache = lrucache.LRUCache
