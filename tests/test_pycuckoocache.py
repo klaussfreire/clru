@@ -248,7 +248,7 @@ class PyCuckooCacheTest(unittest.TestCase):
                 b = c.get(k)
                 b = c.pop(k, v)
 
-            self.assertEquals(len(list(c)), len(list(c.items())))
+            self.assertEqual(len(list(c)), len(list(c.items())))
 
     def testEqualsReentrancy(self):
         # ShyItem self-deletes itself when it's about to be found by SOMEONE ELSE
@@ -272,28 +272,28 @@ class PyCuckooCacheTest(unittest.TestCase):
         c = self.Cache(20)
 
         c[k] = 100
-        self.assertEquals(c[k], 100)
-        self.assertEquals(c[k], 100)
-        self.assertEquals(c.get(k), 100)
-        self.assertEquals(c.get(k), 100)
-        self.assertEquals(c.pop(k, None), 100)
+        self.assertEqual(c[k], 100)
+        self.assertEqual(c[k], 100)
+        self.assertEqual(c.get(k), 100)
+        self.assertEqual(c.get(k), 100)
+        self.assertEqual(c.pop(k, None), 100)
         c[k] = 100
-        self.assertEquals(c.pop(k), 100)
+        self.assertEqual(c.pop(k), 100)
         c[k] = 100
-        self.assertEquals(c.setdefault(k, 200), 100)
-        self.assertEquals(c.setdefault(k, 200), 100)
+        self.assertEqual(c.setdefault(k, 200), 100)
+        self.assertEqual(c.setdefault(k, 200), 100)
         del c[k]
 
         k2 = ShyItem(3)
         c[k] = 100
-        self.assertEquals(c[k2], 100)
+        self.assertEqual(c[k2], 100)
         self.assertRaises(pycuckoocache.CacheMissError, c.__getitem__, k2)
         c[k] = 100
-        self.assertEquals(c.get(k2), 100)
+        self.assertEqual(c.get(k2), 100)
         self.assertIsNone(c.get(k2))
         c[k] = 100
-        self.assertEquals(c.get(k2, 5), 100)
-        self.assertEquals(c.get(k2, 5), 5)
+        self.assertEqual(c.get(k2, 5), 100)
+        self.assertEqual(c.get(k2, 5), 5)
         c[k] = 100
         # Implementations behave differently here, but the important
         # thing to avoid are hard crashes, so just run the operation
@@ -306,8 +306,8 @@ class PyCuckooCacheTest(unittest.TestCase):
             pass
         self.assertRaises(pycuckoocache.CacheMissError, c.pop, k2)
         c[k] = 100
-        self.assertEquals(c.setdefault(k2, 200), 100)
-        self.assertEquals(c.setdefault(k2, 200), 200)
+        self.assertEqual(c.setdefault(k2, 200), 100)
+        self.assertEqual(c.setdefault(k2, 200), 200)
         del c[k2]
 
 @skipIfNotCythonized
