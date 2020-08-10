@@ -6,7 +6,6 @@
 #       
 #   don't do this:
 #       six==1.0.0
-#       libcore==1.2.3
 #
 cython
 
