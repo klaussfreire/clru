@@ -4,10 +4,7 @@
 """The setup script."""
 
 import os
-
 import sys
-
-
 import multiprocessing
 from multiprocessing.pool import ThreadPool
 from setuptools.command.build_ext import build_ext
@@ -15,12 +12,6 @@ from Cython.Distutils import build_ext as cython_build_ext, Extension as CythonE
 from Cython.Build import cythonize
 
 from setuptools import setup, find_packages
-
-
-setup_requires = []
-
-setup_requires.append("pytest-runner==5.1")
-
 
 cmd_class = {}
 setup_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,7 +47,6 @@ def parse_requirements_txt(filename="requirements.txt"):
         # remove whitespaces
         requirements = [line.strip().replace(" ", "") for line in requirements]
         return requirements
-
 
 
 def solve_transitive_dependencies(cython_extensions):
@@ -207,10 +197,6 @@ else:
         cmd_class["build_ext"] = parallel_build_ext
 
 
-
-
-
-
 setup(
     name="clru",
     description="Cython LRU Structures",
@@ -218,7 +204,7 @@ setup(
     author="Claudio Freire",
     author_email="klaussfreire@gmail.com",
     classifiers=[
-        "License :: OSI Approved :: BSD License",
+        "GNU General Public License v3 :: License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
     ],
     install_requires=parse_requirements_txt(),
     extras_require={
@@ -227,7 +213,7 @@ setup(
             req.replace(">=", "==") for req in parse_requirements_txt("requirements-dev.txt")
         ],
     },
-    license="BSD license",
+    license="GPLv3 license",
     long_description=readme + "\n\n" + history,
     long_description_content_type="text/x-rst",
     package_data={
@@ -235,9 +221,8 @@ setup(
         "clru": ["VERSION"],
     },
     packages=find_packages(include=["clru", "clru.*"]),
-    setup_requires=setup_requires,
     test_suite="tests",
-    tests_require=["pytest==4.6.3", ],
+    tests_require=["pytest", ],
     ext_modules=ext_modules,
     cmdclass=cmd_class,
     url="https://github.com/klaussfreire/clru",
