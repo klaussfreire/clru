@@ -14,7 +14,7 @@ bugs with user-visible outcomes.
 When major components get significant changes worthy of mention, they
 can be described in a Major section.
 
-More information can be found HERE:
+More information can be found `HERE <https://keepachangelog.com/en/1.0.0/>`__:
 
 
 v0.1.0 - Unreleased
