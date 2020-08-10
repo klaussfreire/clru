@@ -5,9 +5,18 @@ __pycache__/
 
 # C extensions
 *.so
+<<<<<<< HEAD
 
 # Distribution / packaging
 .Python
+=======
+*.o
+*.c
+
+# Distribution / packaging
+.Python
+env/
+>>>>>>> CORE-2888: Basic info after running cookiecutter
 build/
 develop-eggs/
 dist/
@@ -20,12 +29,18 @@ parts/
 sdist/
 var/
 wheels/
+<<<<<<< HEAD
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
+=======
+*.egg-info/
+.installed.cfg
+*.egg
+>>>>>>> CORE-2888: Basic info after running cookiecutter
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -40,16 +55,26 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
+<<<<<<< HEAD
 .nox/
+=======
+>>>>>>> CORE-2888: Basic info after running cookiecutter
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
 *.cover
+<<<<<<< HEAD
 *.py,cover
 .hypothesis/
 .pytest_cache/
+=======
+.hypothesis/
+.pytest_cache/
+TEST-*.xml
+results.xml
+>>>>>>> CORE-2888: Basic info after running cookiecutter
 
 # Translations
 *.mo
@@ -58,8 +83,11 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
+<<<<<<< HEAD
 db.sqlite3
 db.sqlite3-journal
+=======
+>>>>>>> CORE-2888: Basic info after running cookiecutter
 
 # Flask stuff:
 instance/
@@ -70,6 +98,11 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+<<<<<<< HEAD
+=======
+docs/doctrees/
+docs/html/
+>>>>>>> CORE-2888: Basic info after running cookiecutter
 
 # PyBuilder
 target/
@@ -77,6 +110,7 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+<<<<<<< HEAD
 # IPython
 profile_default/
 ipython_config.py
@@ -97,10 +131,18 @@ __pypackages__/
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
+=======
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+>>>>>>> CORE-2888: Basic info after running cookiecutter
 
 # SageMath parsed files
 *.sage.py
 
+<<<<<<< HEAD
 # Environments
 .env
 .venv
@@ -109,6 +151,15 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+=======
+# dotenv
+.env
+
+# virtualenv
+.venv
+venv/
+ENV/
+>>>>>>> CORE-2888: Basic info after running cookiecutter
 
 # Spyder project settings
 .spyderproject
@@ -122,8 +173,21 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+<<<<<<< HEAD
 .dmypy.json
 dmypy.json
 
 # Pyre type checker
 .pyre/
+=======
+
+# Local files
+*.dump
+*.dump.gz
+*.local.cfg
+*.swp
+*.swo
+tmp/
+.vscode/
+.idea
+>>>>>>> CORE-2888: Basic info after running cookiecutter
