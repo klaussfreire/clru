@@ -23,16 +23,5 @@ v0.1.0 - Unreleased
 Major
 -----
 
-Added
------
-
-Changed
--------
-
-Bugfixes
---------
-
-Technical Task
---------------
-
+* Moved cLRU code to it's own repo
 
