@@ -13,7 +13,8 @@ clru
 
 
 Cython LRU Structures
-* Free software: BSD license
+
+* Free software: GNU LESSER GENERAL PUBLIC LICENSE v3
 * Documentation: https://clru.readthedocs.io.
 
 Features
