@@ -26,7 +26,7 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    git clone git://github.com/claudiofreire/clru
+    git clone git://github.com/klaussfreire/clru
 
 Once you have a copy of the source, you can install it with:
 
@@ -35,4 +35,4 @@ Once you have a copy of the source, you can install it with:
     python setup.py install
     pip install -e .[dev]
 
-.. _Github repo: https://github.com/claudiofreire/clru
+.. _Github repo: https://github.com/klaussfreire/clru
