@@ -77,22 +77,6 @@ docs-doc8: ## check rST files for errors
 	doc8
 
 
-
-docs-docker: ## generate the docs using docker
-	docker run \
-		-it \
-		--volume $(CURRENT_DIR):/src \
-		--env AWS_ACCESS_KEY_ID \
-		--env AWS_SECRET_ACCESS_KEY \
-		--env AWS_REGION \
-		--env ASSETS_BUCKET \
-		--env PROJECT_NAME=clru \
-		docker.jampp.com/readthedocs-image-builder:1.0.0-python2 \
-		build_docs
-
-release: dist ## package and upload a release
-	twine upload -r jampp dist/*
-
 dist: clean ## builds source and wheel package
 	python setup.py sdist
 	python setup.py bdist_wheel
