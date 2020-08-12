@@ -9,18 +9,21 @@ from clru.cuckoocache import pycuckoocache
 
 try:
     from clru.cuckoocache import cycuckoocache as cuckoocache
-    skipIfNotCythonized = lambda c : c
+
+    skipIfNotCythonized = lambda c: c
 except ImportError:
-    from clru.cuckoocache import pycuckoocache as cuckoocache# lint:ok
+    from clru.cuckoocache import pycuckoocache as cuckoocache  # lint:ok
+
     skipIfNotCythonized = unittest.skip("Optimized LazyCuckooCache not built in")
 
+
 class PyCuckooCacheTest(unittest.TestCase):
-    TEST_ELEMENTS = list(zip(range(10), range(10,20)))
+    TEST_ELEMENTS = list(zip(range(10), range(10, 20)))
     Cache = pycuckoocache.LazyCuckooCache
 
     def _build_with_values(self, size, **kwargs):
         c = self.Cache(size, **kwargs)
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             c[k] = v
         return c
 
@@ -29,12 +32,12 @@ class PyCuckooCacheTest(unittest.TestCase):
 
     def testAdd(self, **kwargs):
         evictions = []
-        eviction_callback = lambda k,v : evictions.append((k,v))
-        c = self._build_with_values(20, eviction_callback = eviction_callback, **kwargs)
+        eviction_callback = lambda k, v: evictions.append((k, v))
+        c = self._build_with_values(20, eviction_callback=eviction_callback, **kwargs)
 
         self.assertEqual(len(evictions) + len(c), len(self.TEST_ELEMENTS))
         overflow = dict(evictions)
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             self.assertEqual(c.get(k, overflow.get(k)), v)
             if k in c:
                 self.assertEqual(c[k], v)
@@ -43,7 +46,7 @@ class PyCuckooCacheTest(unittest.TestCase):
         c = self._build_with_values(20)
 
         self.assertLessEqual(len(c), len(self.TEST_ELEMENTS))
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             if k in c:
                 self.assertEqual(c.get(k), v)
                 self.assertEqual(c[k], v)
@@ -51,48 +54,48 @@ class PyCuckooCacheTest(unittest.TestCase):
 
     def testContains(self):
         evictions = []
-        eviction_callback = lambda k,v : evictions.append((k,v))
-        c = self.Cache(20, eviction_callback = eviction_callback)
+        eviction_callback = lambda k, v: evictions.append((k, v))
+        c = self.Cache(20, eviction_callback=eviction_callback)
 
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             self.assertFalse(k in c)
 
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             c[k] = v
 
         self.assertEqual(len(evictions) + len(c), len(self.TEST_ELEMENTS))
         overflow = dict(evictions)
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             self.assertTrue(k in c or k in overflow)
 
-    def testSetDefault(self, min_size = 4, **kwargs):
+    def testSetDefault(self, min_size=4, **kwargs):
         evictions = []
-        eviction_callback = lambda k,v : evictions.append((k,v))
-        c = self.Cache(5, eviction_callback = eviction_callback, **kwargs)
+        eviction_callback = lambda k, v: evictions.append((k, v))
+        c = self.Cache(5, eviction_callback=eviction_callback, **kwargs)
 
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             # Construct a distinct object
             v = float(v)
-            self.assertIs(c.setdefault(k,v), v)
+            self.assertIs(c.setdefault(k, v), v)
 
             # Second time returns the first one
             v2 = float(v)
-            self.assertIs(c.setdefault(k,v2), v)
+            self.assertIs(c.setdefault(k, v2), v)
 
         self.assertGreaterEqual(len(c), min_size)
         self.assertGreater(len(evictions), 0)
 
     def testCas(self):
         evictions = []
-        eviction_callback = lambda k,v : evictions.append((k,v))
-        c = self.Cache(5, eviction_callback = eviction_callback)
+        eviction_callback = lambda k, v: evictions.append((k, v))
+        c = self.Cache(5, eviction_callback=eviction_callback)
 
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             v2 = float(v)
             v3 = v2 + 1
             c[k] = v2
-            success = c.cas(k,v2,v)
-            success2 = c.cas(k,v2,v3)
+            success = c.cas(k, v2, v)
+            success2 = c.cas(k, v2, v3)
             self.assertIs(c[k], v)
             self.assertTrue(success)
             self.assertFalse(success2)
@@ -102,7 +105,7 @@ class PyCuckooCacheTest(unittest.TestCase):
     def testPop(self):
         c = self.Cache(20)
 
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             self.assertRaises(pycuckoocache.CacheMissError, c.pop, k)
             self.assertIs(c.pop(k, None), None)
             c[k] = v
@@ -111,25 +114,25 @@ class PyCuckooCacheTest(unittest.TestCase):
             self.assertIs(c.pop(k, None), None)
 
     def testRehash(self):
-        self.testAdd(initial_size = 1)
+        self.testAdd(initial_size=1)
 
     def testRehashSetDefault(self):
-        self.testSetDefault(initial_size = 1)
+        self.testSetDefault(initial_size=1)
 
     def testPreallocate(self):
-        self.testAdd(preallocate = True)
+        self.testAdd(preallocate=True)
 
     def testClear(self):
         c = self._build_with_values(20)
         c.clear()
         self.assertEqual(len(c), 0)
-        for k,v in self.TEST_ELEMENTS:
+        for k, v in self.TEST_ELEMENTS:
             c[k] = v
 
         self.assertGreater(len(c), 0)
         self.assertLessEqual(len(c), len(self.TEST_ELEMENTS))
 
-    def testUpdate(self, what = TEST_ELEMENTS):
+    def testUpdate(self, what=TEST_ELEMENTS):
         c = self.Cache(20)
         c.update(what)
         self.assertGreater(len(c), 0)
@@ -144,7 +147,7 @@ class PyCuckooCacheTest(unittest.TestCase):
 
     def testReplaceUpdate(self):
         c = self.Cache(20)
-        c.update([(k,None) for k,v in self.TEST_ELEMENTS])
+        c.update([(k, None) for k, v in self.TEST_ELEMENTS])
         c.update(self.TEST_ELEMENTS)
         self.assertGreater(len(c), 0)
         self.assertLessEqual(len(c), len(self.TEST_ELEMENTS))
@@ -172,9 +175,9 @@ class PyCuckooCacheTest(unittest.TestCase):
 
     def testReplace(self):
         evictions = []
-        eviction_callback = lambda k,v : evictions.append((k,v))
-        c = self._build_with_values(20, eviction_callback = eviction_callback)
-        for k,v in self.TEST_ELEMENTS:
+        eviction_callback = lambda k, v: evictions.append((k, v))
+        c = self._build_with_values(20, eviction_callback=eviction_callback)
+        for k, v in self.TEST_ELEMENTS:
             c[k] = v
             self.assertIs(c[k], v)
 
@@ -186,17 +189,17 @@ class PyCuckooCacheTest(unittest.TestCase):
             self.assertEqual(old_evictions, len(evictions))
 
     def testCustomHashes(self):
-        h1 = lambda x : hash(str(x))
-        h2 = lambda x : hash("blah" + str(x))
-        c = self.testAdd(hash1 = h1, hash2 = h2)
+        h1 = lambda x: hash(str(x))
+        h2 = lambda x: hash("blah" + str(x))
+        c = self.testAdd(hash1=h1, hash2=h2)
 
     def testNoTouch(self):
-        c = self.testAdd(touch_on_read = False)
+        c = self.testAdd(touch_on_read=False)
 
     def testIters(self):
         evictions = []
-        eviction_callback = lambda k,v : evictions.append((k,v))
-        c = self._build_with_values(20, eviction_callback = eviction_callback)
+        eviction_callback = lambda k, v: evictions.append((k, v))
+        c = self._build_with_values(20, eviction_callback=eviction_callback)
         self.assertEqual(len(c), len(c.keys()))
         self.assertEqual(len(c), len(c.values()))
         self.assertEqual(len(c), len(list(c.items())))
@@ -205,17 +208,17 @@ class PyCuckooCacheTest(unittest.TestCase):
         self.assertEqual(c.keys(), list(c.iterkeys()))
         self.assertEqual(c.values(), list(c.itervalues()))
         self.assertEqual(list(c.items()), list(c.iteritems()))
-        self.assertEqual({k for k,v in self.TEST_ELEMENTS}, set(c.keys()) | {k for k,v in evictions})
-        self.assertEqual({k for k,v in self.TEST_ELEMENTS}, set(c.iterkeys()) | {k for k,v in evictions})
-        self.assertEqual({v for k,v in self.TEST_ELEMENTS}, set(c.values()) | {v for k,v in evictions})
-        self.assertEqual({v for k,v in self.TEST_ELEMENTS}, set(c.itervalues()) | {v for k,v in evictions})
+        self.assertEqual({k for k, v in self.TEST_ELEMENTS}, set(c.keys()) | {k for k, v in evictions})
+        self.assertEqual({k for k, v in self.TEST_ELEMENTS}, set(c.iterkeys()) | {k for k, v in evictions})
+        self.assertEqual({v for k, v in self.TEST_ELEMENTS}, set(c.values()) | {v for k, v in evictions})
+        self.assertEqual({v for k, v in self.TEST_ELEMENTS}, set(c.itervalues()) | {v for k, v in evictions})
         self.assertEqual(set(self.TEST_ELEMENTS), set(c.items()) | set(evictions))
         self.assertEqual(set(self.TEST_ELEMENTS), set(c.iteritems()) | set(evictions))
 
     def testRepriorize(self):
         evictions = []
-        eviction_callback = lambda k,v : evictions.append((k,v))
-        c = self._build_with_values(20, eviction_callback = eviction_callback)
+        eviction_callback = lambda k, v: evictions.append((k, v))
+        c = self._build_with_values(20, eviction_callback=eviction_callback)
         c._nextprio = 0x7FFFFFFFFFFFFFFE
         c[1000] = 1000
         self.assertEqual(c.get(1000), 1000)
@@ -223,12 +226,14 @@ class PyCuckooCacheTest(unittest.TestCase):
 
     def testReentrancy(self):
         fucking = []
+
         def fuckerhash(x):
             if not fucking:
                 fucking.append(None)
                 c[hash(x)] = 1
                 del fucking[:]
             return hash(x)
+
         def crackerhash(x):
             c.clear()
             return 1 + hash(x)
@@ -236,14 +241,14 @@ class PyCuckooCacheTest(unittest.TestCase):
         for h1, h2 in [(fuckerhash, crackerhash), (crackerhash, fuckerhash)]:
             # Of course, cannot assert anything, these hash functions are really evil and unpredictable
             # We just want to make sure there are no segfaults
-            c = self.Cache(20, hash1 = fuckerhash, hash2 = crackerhash)
-            c.update([(k,None) for k,v in self.TEST_ELEMENTS])
+            c = self.Cache(20, hash1=fuckerhash, hash2=crackerhash)
+            c.update([(k, None) for k, v in self.TEST_ELEMENTS])
             c.update(self.TEST_ELEMENTS)
 
-            for k,v in self.TEST_ELEMENTS:
+            for k, v in self.TEST_ELEMENTS:
                 c.setdefault(k, v)
 
-            for k,v in self.TEST_ELEMENTS:
+            for k, v in self.TEST_ELEMENTS:
                 b = k in c
                 b = c.get(k)
                 b = c.pop(k, v)
@@ -253,9 +258,11 @@ class PyCuckooCacheTest(unittest.TestCase):
     def testEqualsReentrancy(self):
         # ShyItem self-deletes itself when it's about to be found by SOMEONE ELSE
         is_cythonized = self.Cache is not pycuckoocache.LazyCuckooCache
+
         class ShyItem:
             def __init__(self, v):
                 self.v = v
+
             def __eq__(self, other):
                 # The cythonized version should check for identity before invoking equality
                 if isinstance(other, ShyItem) and other.v == self.v:
@@ -264,6 +271,7 @@ class PyCuckooCacheTest(unittest.TestCase):
                     return True
                 else:
                     return False
+
             def __hash__(self):
                 return hash(self.v)
 
@@ -310,8 +318,8 @@ class PyCuckooCacheTest(unittest.TestCase):
         self.assertEqual(c.setdefault(k2, 200), 200)
         del c[k2]
 
+
 @skipIfNotCythonized
 class CuckooCacheTest(PyCuckooCacheTest):
     Cache = cuckoocache.LazyCuckooCache
     testRepriorize = None
-

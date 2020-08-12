@@ -6,8 +6,9 @@ CacheMissError = KeyError
 
 IsThreadsafe = False
 
+
 class _node(object):
-    __slots__ = ( 'prio', 'index', 'key', 'value' )
+    __slots__ = ("prio", "index", "key", "value")
 
     def __init__(self, prio, index, key, value, int=int):
         self.prio = int(prio)
@@ -39,7 +40,8 @@ class LRUCache(object):
     its size is guaranteed to never surpass the assigned limit and when
     spillover occurs, the least recently used items get removed first.
     """
-    def __init__(self, size, touch_on_read = True, eviction_callback = None):
+
+    def __init__(self, size, touch_on_read=True, eviction_callback=None):
         self.size = size
         self.touch_on_read = touch_on_read
         self.pqueue = []
@@ -71,8 +73,8 @@ class LRUCache(object):
         sz = len(pqueue)
         while 1:
             ix = node.index
-            l  = 2 * ix + 1
-            r  = 2 * ix + 2
+            l = 2 * ix + 1
+            r = 2 * ix + 2
 
             if r < sz:
                 ln = pqueue[l]
@@ -80,10 +82,10 @@ class LRUCache(object):
 
             if r < sz and rn.prio < ln.prio:
                 sw = r
-                swn= rn
+                swn = rn
             elif l < sz:
                 sw = l
-                swn= pqueue[l]
+                swn = pqueue[l]
             else:
                 break
 
@@ -172,7 +174,7 @@ class LRUCache(object):
                 self.decrease(node)
         return False
 
-    def get(self, key, deflt = None):
+    def get(self, key, deflt=None):
         if key not in self.emap:
             return deflt
         else:
@@ -180,7 +182,7 @@ class LRUCache(object):
             self.decrease(node)
             return node.value
 
-    def pop(self, key, deflt = CacheMissError):
+    def pop(self, key, deflt=CacheMissError):
         if key not in self.emap:
             if deflt is CacheMissError:
                 raise CacheMissError(key)
@@ -191,7 +193,7 @@ class LRUCache(object):
             del self[key]
         return rv
 
-    def setdefault(self, key, deflt = None):
+    def setdefault(self, key, deflt=None):
         if key not in self.emap:
             self[key] = deflt
             return deflt
@@ -202,10 +204,10 @@ class LRUCache(object):
 
     def update(self, iterOrDict):
         if isinstance(iterOrDict, dict) or isinstance(iterOrDict, LRUCache):
-            for k,v in six.iteritems(iterOrDict):
+            for k, v in six.iteritems(iterOrDict):
                 self[k] = v
         else:
-            for k,v in iterOrDict:
+            for k, v in iterOrDict:
                 self[k] = v
 
     def clear(self):
@@ -222,29 +224,33 @@ class LRUCache(object):
 
 
 class LRUCacheItemsIterator(object):
-    __slots__ = ('cache', 'pos')
+    __slots__ = ("cache", "pos")
 
     def __init__(self, cache):
         self.cache = cache
         self.pos = 0
+
     def __next__(self):
         if self.pos >= len(self.cache.pqueue):
             raise StopIteration
         else:
             node = self.cache.pqueue[self.pos]
             self.pos += 1
-            return ( node.key, node.value )
+            return (node.key, node.value)
+
     def __iter__(self):
         return self
 
     next = __next__
 
+
 class LRUCacheValuesIterator(object):
-    __slots__ = ('cache', 'pos')
+    __slots__ = ("cache", "pos")
 
     def __init__(self, cache):
         self.cache = cache
         self.pos = 0
+
     def __next__(self):
         if self.pos >= len(self.cache.pqueue):
             raise StopIteration
@@ -252,6 +258,7 @@ class LRUCacheValuesIterator(object):
             node = self.cache.pqueue[self.pos]
             self.pos += 1
             return node.value
+
     def __iter__(self):
         return self
 

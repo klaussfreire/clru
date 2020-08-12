@@ -10,8 +10,9 @@ CacheMissError = KeyError
 
 IsThreadsafe = False
 
+
 class _node(object):
-    __slots__ = ( 'key', 'value', 'h1', 'h2', 'prio' )
+    __slots__ = ("key", "value", "h1", "h2", "prio")
 
     def __init__(self, key, value, h1, h2, prio):
         self.key = key
@@ -20,8 +21,10 @@ class _node(object):
         self.h2 = h2
         self.prio = prio
 
+
 def _hash2(seed, x):
     return hash((seed, x))
+
 
 class LazyCuckooCache(object):
     """Quasi-Least-Recently-Used (LRU) cache.
@@ -37,8 +40,17 @@ class LazyCuckooCache(object):
     The default hash functions may not be at all optimal, so you're encouraged
     to provide your own if you know the type of keys you'll be hashing.
     """
-    def __init__(self, size, touch_on_read = True, eviction_callback = None,
-            preallocate = True, hash1 = None, hash2 = None, initial_size = 256):
+
+    def __init__(
+        self,
+        size,
+        touch_on_read=True,
+        eviction_callback=None,
+        preallocate=True,
+        hash1=None,
+        hash2=None,
+        initial_size=256,
+    ):
         if size <= 0:
             raise ValueError("Cannot build a size-0 cache")
 
@@ -277,7 +289,7 @@ class LazyCuckooCache(object):
 
         return False
 
-    def get(self, key, deflt = None):
+    def get(self, key, deflt=None):
         table = self.table
         tsize = len(table)
         h1 = self.hash1(key)
@@ -296,7 +308,7 @@ class LazyCuckooCache(object):
 
         return deflt
 
-    def pop(self, key, deflt = CacheMissError):
+    def pop(self, key, deflt=CacheMissError):
         table = self.table
         tsize = len(table)
         h1 = self.hash1(key)
@@ -320,7 +332,7 @@ class LazyCuckooCache(object):
         else:
             return deflt
 
-    def setdefault(self, key, deflt = None):
+    def setdefault(self, key, deflt=None):
         for j in xrange(3):
             table = self.table
             tsize = len(table)
@@ -373,10 +385,10 @@ class LazyCuckooCache(object):
         if self is iterOrDict:
             return
         if isinstance(iterOrDict, dict) or isinstance(iterOrDict, LazyCuckooCache):
-            for k,v in six.iteritems(iterOrDict):
+            for k, v in six.iteritems(iterOrDict):
                 self[k] = v
         else:
-            for k,v in iterOrDict:
+            for k, v in iterOrDict:
                 self[k] = v
 
     def clear(self):
@@ -388,4 +400,3 @@ class LazyCuckooCache(object):
 
     def __repr__(self):
         return "<LazyCuckooCache (%d elements, %d max)>" % (len(self), self.size)
-

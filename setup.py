@@ -21,14 +21,7 @@ with open(os.path.join(setup_dir, "README.rst")) as readme_file:
 with open(os.path.join(setup_dir, "CHANGELOG.rst")) as history_file:
     history = history_file.read()
 
-with open(
-    os.path.join(
-        setup_dir,
-        "clru", "VERSION"
-    ),
-    "r",
-
-) as vf:
+with open(os.path.join(setup_dir, "clru", "VERSION"), "r",) as vf:
     version = vf.read().strip()
 
 
@@ -38,10 +31,7 @@ def parse_requirements_txt(filename="requirements.txt"):
         # remove all the requirements that are comments
         requirements = [line for line in requirements if not line.startswith("#")]
         # remove inline comments
-        requirements = [
-            line.split("#", 1)[0] if "#" in line else line
-            for line in requirements
-        ]
+        requirements = [line.split("#", 1)[0] if "#" in line else line for line in requirements]
         # remove empty lines
         requirements = list(filter(None, requirements))
         # remove whitespaces
@@ -71,10 +61,7 @@ def solve_transitive_dependencies(cython_extensions):
     :returns: all the extensions used to cythonize the files
     """
     # create a map with all the names of the extensions
-    cython_extensions_map = {
-        extension["name"]: extension
-        for extension in cython_extensions
-    }
+    cython_extensions_map = {extension["name"]: extension for extension in cython_extensions}
 
     for extension in cython_extensions:
         extension["finished"] = False
@@ -111,10 +98,8 @@ def solve_transitive_dependencies(cython_extensions):
                 ]
                 if not_cython_files:
                     raise Exception(
-                        "Extension %s was finished but a dependency isn't a cython file: %s" % (
-                            extension["name"],
-                            not_cython_files
-                        )
+                        "Extension %s was finished but a dependency isn't a cython file: %s"
+                        % (extension["name"], not_cython_files)
                     )
 
                 extension["depends"] = list(final_dependencies)
@@ -129,10 +114,7 @@ def solve_transitive_dependencies(cython_extensions):
 
     extension_modules = [
         CythonExtension(
-            extension["name"],
-            extension["sources"],
-            depends=extension["depends"],
-            **extension.get("kwargs", {})
+            extension["name"], extension["sources"], depends=extension["depends"], **extension.get("kwargs", {})
         )
         for extension in cython_extensions
     ]
@@ -145,16 +127,16 @@ def solve_transitive_dependencies(cython_extensions):
 # dependencies
 cython_extensions = [
     {
-        'name': 'clru.lrucache.cylrucache',
-        'sources': ['clru/lrucache/cylrucache.pyx'],
-        'depends': ['clru/lrucache/cylrucache.pxd'],
-        'kwargs': {'extra_compile_args': ["-O3"]},
+        "name": "clru.lrucache.cylrucache",
+        "sources": ["clru/lrucache/cylrucache.pyx"],
+        "depends": ["clru/lrucache/cylrucache.pxd"],
+        "kwargs": {"extra_compile_args": ["-O3"]},
     },
     {
-        'name': 'clru.cuckoocache.cycuckoocache',
-        'sources': ['clru/cuckoocache/cycuckoocache.pyx'],
-        'depends': ['clru/cuckoocache/cycuckoocache.pxd'],
-        'kwargs': {'extra_compile_args': ["-O3"]},
+        "name": "clru.cuckoocache.cycuckoocache",
+        "sources": ["clru/cuckoocache/cycuckoocache.pyx"],
+        "depends": ["clru/cuckoocache/cycuckoocache.pxd"],
+        "kwargs": {"extra_compile_args": ["-O3"]},
     },
 ]
 extension_modules = solve_transitive_dependencies(cython_extensions)
@@ -172,7 +154,7 @@ if "-j" in sys.argv:
         # or if we should use the number of CPU
         try:
             parallel = int(sys.argv[jobpos + 1])
-            del sys.argv[jobpos:jobpos + 2]
+            del sys.argv[jobpos : jobpos + 2]
         except ValueError as e:
             parallel = multiprocessing.cpu_count()
             del sys.argv[jobpos]
@@ -185,16 +167,12 @@ if "--no-cython" in sys.argv:
 else:
     # check if Cython is already installed then we don"t have to do
     # anything special
-    ext_modules = cythonize(
-        extension_modules,
-        include_path=include_dirs,
-        nthreads=parallel,
-        force=force_cython,
-    )
+    ext_modules = cythonize(extension_modules, include_path=include_dirs, nthreads=parallel, force=force_cython,)
     cmd_class = {"build_ext": cython_build_ext}
 
     # use a coustom builder when doing a cythonization
     if parallel is not None:
+
         class parallel_build_ext(build_ext):
             def build_extensions(self):
                 # First, sanity-check the "extensions" list
@@ -207,6 +185,7 @@ else:
                 pool.map(self.build_extension, self.extensions, chunksize=1)
                 pool.close()
                 pool.join()
+
         cmd_class["build_ext"] = parallel_build_ext
 
 
@@ -216,26 +195,19 @@ setup(
     version=version,
     author="Claudio Freire",
     author_email="klaussfreire@gmail.com",
-    classifiers=[
-        "GNU General Public License v3 :: License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
-    ],
+    classifiers=["GNU General Public License v3 :: License :: OSI Approved :: GNU General Public License v3 (GPLv3)"],
     install_requires=parse_requirements_txt(),
     extras_require={
         "dev": parse_requirements_txt("requirements-dev.txt"),
-        "dev-strict": [
-            req.replace(">=", "==") for req in parse_requirements_txt("requirements-dev.txt")
-        ],
+        "dev-strict": [req.replace(">=", "==") for req in parse_requirements_txt("requirements-dev.txt")],
     },
     license="GPLv3 license",
     long_description=readme + "\n\n" + history,
     long_description_content_type="text/x-rst",
-    package_data={
-        "": ["*.pxd", "*.pyx"],
-        "clru": ["VERSION"],
-    },
+    package_data={"": ["*.pxd", "*.pyx"], "clru": ["VERSION"],},
     packages=find_packages(include=["clru", "clru.*"]),
     test_suite="tests",
-    tests_require=["pytest", ],
+    tests_require=["pytest",],
     ext_modules=ext_modules,
     cmdclass=cmd_class,
     url="https://github.com/klaussfreire/clru",
