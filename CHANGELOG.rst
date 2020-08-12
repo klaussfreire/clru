@@ -25,3 +25,7 @@ Major
 
 * Moved cLRU code to it's own repo
 
+Technical Tasks
+---------------
+
+* Added Github Action hook to run the tests for every PR
