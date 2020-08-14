@@ -97,10 +97,14 @@ def solve_transitive_dependencies(cython_extensions):
                     if os.path.splitext(filename)[1] not in (".pxd", ".pyx", ".c", ".h")
                 ]
                 if not_cython_files:
+                    # fmt: off
                     raise Exception(
-                        "Extension %s was finished but a dependency isn't a cython file: %s"
-                        % (extension["name"], not_cython_files)
+                        "Extension %s was finished but a dependency isn't a cython file: %s" % (
+                            extension["name"],
+                            not_cython_files
+                        )
                     )
+                    # fmt: on
 
                 extension["depends"] = list(final_dependencies)
                 extension["finished"] = True
