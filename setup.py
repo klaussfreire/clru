@@ -167,7 +167,7 @@ if "--no-cython" in sys.argv:
 else:
     # check if Cython is already installed then we don"t have to do
     # anything special
-    ext_modules = cythonize(extension_modules, include_path=include_dirs, nthreads=parallel, force=force_cython,)
+    ext_modules = cythonize(extension_modules, include_path=include_dirs, nthreads=parallel, force=force_cython)
     cmd_class = {"build_ext": cython_build_ext}
 
     # use a coustom builder when doing a cythonization
@@ -204,10 +204,10 @@ setup(
     license="GPLv3 license",
     long_description=readme + "\n\n" + history,
     long_description_content_type="text/x-rst",
-    package_data={"": ["*.pxd", "*.pyx"], "clru": ["VERSION"],},
+    package_data={"": ["*.pxd", "*.pyx"], "clru": ["VERSION"]},
     packages=find_packages(include=["clru", "clru.*"]),
     test_suite="tests",
-    tests_require=["pytest",],
+    tests_require=["pytest"],
     ext_modules=ext_modules,
     cmdclass=cmd_class,
     url="https://github.com/klaussfreire/clru",
