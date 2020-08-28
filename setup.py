@@ -143,7 +143,20 @@ def solve_transitive_dependencies(cython_extensions):
 # dependencies. Check :meth:`.solve_transitive_dependencies` to get more information
 # about the values on the dict. The depends should only include the cimported
 # dependencies
-cython_extensions = []
+cython_extensions = [
+    {
+        'name': 'clru.lrucache.cylrucache',
+        'sources': ['clru/lrucache/cylrucache.pyx'],
+        'depends': ['clru/lrucache/cylrucache.pxd'],
+        'kwargs': {'extra_compile_args': ["-O3"]},
+    },
+    {
+        'name': 'clru.cuckoocache.cycuckoocache',
+        'sources': ['clru/cuckoocache/cycuckoocache.pyx'],
+        'depends': ['clru/cuckoocache/cycuckoocache.pxd'],
+        'kwargs': {'extra_compile_args': ["-O3"]},
+    },
+]
 extension_modules = solve_transitive_dependencies(cython_extensions)
 include_dirs = os.environ.get("CYTHON_INCLUDE_DIRS", ".").split(":")
 
