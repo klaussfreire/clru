@@ -29,3 +29,5 @@ Technical Tasks
 ---------------
 
 * Added Github Action hook to run the tests for every PR
+* Added the imports on the ``__init__.py`` to import the cython version when
+  possible
