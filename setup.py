@@ -206,6 +206,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Cython",
         "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3",
         "Topic :: Software Development :: Libraries",
         "Operating System :: OS Independent",
     ],
