@@ -16,6 +16,13 @@ can be described in a Major section.
 
 More information can be found `HERE <https://keepachangelog.com/en/1.0.0/>`__:
 
+v0.1.1 - 2020-11-18
+===================
+
+Bugfixes
+~~~~~~~~
+
+- Fixed release manifest to include necessary include files for build
 
 v0.1.0 - 2020-11-18
 ===================
