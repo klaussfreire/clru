@@ -16,6 +16,14 @@ can be described in a Major section.
 
 More information can be found `HERE <https://keepachangelog.com/en/1.0.0/>`__:
 
+v0.1.2 - Unreleased
+===================
+
+Bugfixes
+~~~~~~~~
+
+- Add missing ``six`` requirement
+
 v0.1.1 - 2020-11-18
 ===================
 
