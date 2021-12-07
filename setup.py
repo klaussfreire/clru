@@ -168,6 +168,7 @@ if "-j" in sys.argv:
 
 if "--no-cython" in sys.argv:
     del sys.argv[sys.argv.index("--no-cython")]
+    ext_modules = None
 else:
     # check if Cython is already installed then we don"t have to do
     # anything special

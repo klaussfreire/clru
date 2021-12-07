@@ -23,6 +23,8 @@ Bugfixes
 ~~~~~~~~
 
 - Add missing ``six`` requirement
+- Exclude generated c files from source distributions to make sure they're
+  generated correctly upon install.
 
 v0.1.1 - 2020-11-18
 ===================
