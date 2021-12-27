@@ -16,7 +16,7 @@ can be described in a Major section.
 
 More information can be found `HERE <https://keepachangelog.com/en/1.0.0/>`__:
 
-v0.1.2 - Unreleased
+v0.1.2 - 2021-12-27
 ===================
 
 Bugfixes
