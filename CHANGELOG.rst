@@ -38,12 +38,12 @@ v0.1.0 - 2020-11-18
 ===================
 
 Major
------
+~~~~~
 
 * Moved cLRU code to it's own repo
 
 Technical Tasks
----------------
+~~~~~~~~~~~~~~~
 
 * Added Github Action hook to run the tests for every PR
 * Added the imports on the ``__init__.py`` to import the cython version when
